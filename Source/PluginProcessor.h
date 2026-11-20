@@ -1,5 +1,6 @@
 #pragma once
 #include <juce_audio_processors/juce_audio_processors.h>
+#include "ClipCapture.h"
 
 class BassRandomizerProcessor : public juce::AudioProcessor
 {
@@ -31,8 +32,10 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
     juce::AudioProcessorValueTreeState apvts;
+    ClipCapture capture { apvts };   // records our MIDI output into a draggable clip
 
 private:
+    void processGenerated (juce::AudioBuffer<float>&, juce::MidiBuffer&);
     static juce::AudioProcessorValueTreeState::ParameterLayout createLayout();
 
     std::atomic<float> *pRoot, *pOctave, *pScale, *pSteps, *pRate, *pDensity,
